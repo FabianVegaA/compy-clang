@@ -21,3 +21,9 @@ cabal.project.local
 cabal.project.local~
 .HTF/
 .ghc.environment.*
+
+# VsCode
+.vscode/
+
+# Executables
+bin/
