@@ -8,8 +8,8 @@ returnTest =
   let cases =
         [ (Return (Literal "0" Int), "return 0;"),
           (Return (Val "x"), "return x;"),
-          (Return (Infix (Literal "0" Int) Add (Literal "0" Int)), "return 0 + 0;"),
-          (Return (Infix (Val "x") Add (Val "y")), "return x + y;"),
+          (Return (Infix (Literal "0" Int) Add (Literal "0" Int)), "return 0+0;"),
+          (Return (Infix (Val "x") Add (Val "y")), "return x+y;"),
           (Return (Prefix Not (Val "x")), "return !x;")
         ]
    in test cases "Return"
