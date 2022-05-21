@@ -7,10 +7,11 @@ import qualified Data.Map as Map
 builtins :: Map String String
 builtins = Map.fromList [("print", "printf")]
 
-data Type = Int | Bool | String | Void
+data Type = Int | Float | Bool | String | Void
 
 instance Show Type where
   show Int = "int"
+  show Float = "float"
   show Bool = "char"
   show String = "char*"
   show Void = "void"
@@ -82,13 +83,17 @@ data Expression
   | Continue
   | Assign
       { identifier :: String,
+        value :: Expression
+      }
+  | Declare
+      { identifier :: String,
         value :: Expression,
         type_value :: Type
       }
 
 instance Show Expression where
   show (Val identifier) = identifier
-  show (Infix left operator right) = unwords [show left, show operator, show right]
+  show (Infix left operator right) = mconcat [show left, show operator, show right]
   show (Prefix operator right) = show operator ++ show right
   show (Return return_value) = mconcat ["return ", show return_value, ";"]
   show (Call identifier arguments_call) =
@@ -111,7 +116,7 @@ instance Show Expression where
      in type_return' ++ " " ++ identifier ++ "(" ++ args ++ ")" ++ show block
   show (Block expression) =
     case expression of
-      [exp] -> "{" ++ show exp ++ ";" ++ "}"
+      [exp] -> "{" ++ show exp ++ "}"
       _ ->
         let expressions = map show expression
          in "{" ++ intercalate ";" expressions ++ ";" ++ "}"
@@ -127,16 +132,18 @@ instance Show Expression where
             elif@(Elif condition@Infix {} block@Block {}) <- elifs
             pure $ show elif
           _ -> ""
-     in "if (" ++ condition' ++ ")" ++ block_if' ++ elifs' ++ block_else'
+     in "if(" ++ condition' ++ ")" ++ block_if' ++ elifs' ++ block_else'
   show (Elif condition@Infix {} block@Block {}) =
-    unwords ["else if (", show condition, ")", show block]
-  show (While condition@Infix {} block@Block {}) =
-    unwords ["while (", show condition, ")", show block]
+    mconcat ["else if(", show condition, ")", show block]
+  show (While condition block@Block {}) =
+    mconcat ["while(", show condition, ")", show block]
   show (For val iterator block@Block {}) = undefined -- TODO: implement iterator translate in C
   show Break = "break"
   show Continue = "continue"
-  show (Assign identifier value type_value) =
-    unwords [show type_value, identifier, "=", show value]
+  show (Assign identifier value) =
+    mconcat [identifier, "=", show value, ";"]
+  show (Declare identifier value type_value) =
+    mconcat [show type_value, " ", identifier, "=", show value, ";"]
   show (Program expression) =
     let standard_libs = ["stdio.h", "stdlib.h", "string.h"]
         imports = unlines $ map ((++ ">") . ("#include <" ++)) standard_libs
