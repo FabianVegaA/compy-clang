@@ -21,7 +21,7 @@ isFunction _ = False
 
 genFirm :: Expression -> [Char]
 genFirm (Function identifier arguments type_return _) =
-  let args = intercalate ", " $ map (\(arg, type_arg) -> arg ++ " " ++ show type_arg) arguments
+  let args = intercalate ", " $ map (\(arg, type_arg) -> show type_arg ++ " " ++ arg) arguments
       type_return' = case identifier of
         "main" -> "int"
         _ -> show type_return
