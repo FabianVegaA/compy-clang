@@ -3,15 +3,16 @@ import Expression
       ( Assign,
         Block,
         Call,
-        Elif,
+        Declare,
         Function,
         If,
         Infix,
         Literal,
         Program,
-        Return
+        Return,
+        Val
       ),
-    Operator (Add, Eq),
+    Operator (Add, Leq, Sub),
     Type (Int, String, Void),
   )
 import Translate (translateToCLang)
@@ -22,22 +23,18 @@ main = do
         Program
           [ Function "main" [] Void $
               Block
-                [ Assign "x" (Infix (Literal "1" Int) Add (Literal "1" Int)) Int,
-                  Call "print" [Literal "%s" String, Call "oneIsZero" []]
+                [ Declare "x" (Infix (Literal "1" Int) Add (Literal "1" Int)) Int,
+                  Call "print" [Literal "%d" String, Call "fibonacci" [Literal "7" Int]]
                 ],
-            Function "oneIsZero" [] String $
-              Block
-                [ If
-                    (Infix (Literal "1" Int) Eq (Literal "0" Int))
-                    (Block [Return (Literal "Is equal" String)])
-                    (Just (Block [Return (Literal "Is not equal" String)]))
-                    ( Just
-                        [ Elif
-                            (Infix (Literal "2" Int) Eq (Literal "0" Int))
-                            (Block [Return (Literal "Is not equal" String)])
-                        ]
-                    )
-                ]
+            Function
+              "fibonacci"
+              [("x", Int)]
+              Int
+              ( Block
+                  [ If (Infix (Val "x") Leq (Literal "1" Int)) (Block [Return (Literal "1" Int)]) Nothing Nothing,
+                    Return (Infix (Call "fibonacci" [Infix (Val "x") Sub (Literal "1" Int)]) Add (Call "fibonacci" [Infix (Val "x") Sub (Literal "2" Int)]))
+                  ]
+              )
           ]
   translated <- translateToCLang program "main.c"
   putStr translated
