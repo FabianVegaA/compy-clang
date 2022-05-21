@@ -90,7 +90,7 @@ instance Show Expression where
   show (Val identifier) = identifier
   show (Infix left operator right) = unwords [show left, show operator, show right]
   show (Prefix operator right) = show operator ++ show right
-  show (Return return_value) = unwords ["return", show return_value]
+  show (Return return_value) = mconcat ["return ", show return_value, ";"]
   show (Call identifier arguments_call) =
     let args = intercalate ", " $ map show arguments_call
         identifier' =

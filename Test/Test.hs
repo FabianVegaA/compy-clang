@@ -2,11 +2,19 @@ import Control.Monad (void)
 import Test.IfTest (ifTest)
 import Test.InfixTest (infixTest)
 import Test.PrefixTest (prefixTest)
+import Test.ReturnTest (returnTest)
 import Test.ValTest (valTest)
 
 main :: IO ()
 main = do
-  results <- executeTests [ifTest, valTest, infixTest, prefixTest]
+  results <-
+    executeTests
+      [ ifTest,
+        valTest,
+        infixTest,
+        prefixTest,
+        returnTest
+      ]
   if and results
     then putStrLn "All tests passed!"
     else putStrLn "Some tests failed!"
