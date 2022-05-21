@@ -1,9 +1,15 @@
 import Control.Monad (void)
+import Test.AssignTest (assignTest)
+import Test.CallTest (callTest)
+import Test.DeclareTest (declareTest)
+import Test.FunctionTest (functionTest)
 import Test.IfTest (ifTest)
 import Test.InfixTest (infixTest)
+import Test.LiteralTest (literalTest)
 import Test.PrefixTest (prefixTest)
 import Test.ReturnTest (returnTest)
 import Test.ValTest (valTest)
+import Test.WhileTest (whileTest)
 
 main :: IO ()
 main = do
@@ -13,7 +19,13 @@ main = do
         valTest,
         infixTest,
         prefixTest,
-        returnTest
+        returnTest,
+        callTest,
+        literalTest,
+        functionTest,
+        whileTest,
+        assignTest,
+        declareTest
       ]
   if and results
     then putStrLn "All tests passed!"
