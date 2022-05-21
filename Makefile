@@ -1,4 +1,4 @@
-check: clean
+run: clean
 	mkdir -p bin
 	ghc Main.hs -o Main
 	
