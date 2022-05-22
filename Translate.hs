@@ -7,7 +7,7 @@ translateToCLang :: Expression -> String -> IO String
 translateToCLang program@(Program expressions) file_path =
   do
     writeFile "headers.h" headers
-    let translated = "#include \"headers.h\"\n" ++ show program
+    let translated = "#include \"headers.h\"\n#include \"utils.h\"\n" ++ show program
     writeFile "main.c" translated
     return translated
   where
