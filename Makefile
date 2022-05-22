@@ -11,9 +11,11 @@ run: clean
 
 	mv *.c bin/
 	mv *.h bin/
+	cp lib/*.c bin/
+	cp lib/*.h bin/
 
 	echo "\nCompiling C code..."
-	clang -o bin/exec bin/main.c
+	clang -o bin/exec bin/main.c bin/range.c
 
 	echo "\nExecuting..."
 	./bin/exec
