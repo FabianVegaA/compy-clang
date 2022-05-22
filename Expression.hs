@@ -5,7 +5,11 @@ import Data.Map (Map, (!))
 import qualified Data.Map as Map
 
 builtins :: Map String String
-builtins = Map.fromList [("print", "printf")]
+builtins =
+  Map.fromList
+    [ ("print", "printf"),
+      ("range", "range")
+    ]
 
 data Type = Int | Float | Bool | String | Void
 
@@ -116,7 +120,7 @@ instance Show Expression where
      in type_return' ++ " " ++ identifier ++ "(" ++ args ++ ")" ++ show block
   show (Block expression) =
     case expression of
-      [exp] -> "{" ++ show exp ++ "}"
+      [exp] -> "{" ++ show exp ++ ";}"
       _ ->
         let expressions = map show expression
          in "{" ++ intercalate ";" expressions ++ ";" ++ "}"
@@ -137,7 +141,30 @@ instance Show Expression where
     mconcat ["else if(", show condition, ")", show block]
   show (While condition block@Block {}) =
     mconcat ["while(", show condition, ")", show block]
-  show (For val iterator block@Block {}) = undefined -- TODO: implement iterator translate in C
+  show (For val@Val {} iterator block@Block {}) =
+    let val' = show val
+        iterator' = case iterator of
+          Call identifier args ->
+            if Map.member identifier builtins
+              then showBuiltin identifier args
+              else error "iterator not supported"
+          _ -> error "For iterator distinc range not implemented"
+        block' = init . tail $ show block
+     in mconcat
+          [ iterator',
+            ";",
+            "int ", -- FIXME: this is a hack
+            val',
+            ";",
+            "do{",
+            val',
+            "=g->next(g);",
+            "if(",
+            val',
+            "==INT_MAX){break;}",
+            block',
+            "}while(1);"
+          ]
   show Break = "break"
   show Continue = "continue"
   show (Assign identifier value) =
@@ -149,3 +176,34 @@ instance Show Expression where
         imports = unlines $ map ((++ ">") . ("#include <" ++)) standard_libs
      in imports ++ unlines (map show expression)
   show _ = error "Not found expression to translate"
+
+showBuiltin :: String -> [Expression] -> String
+showBuiltin "range" args = showRange args
+showBuiltin _ _ = error "showBuiltin: unknown builtin"
+
+showRange :: [Expression] -> String
+showRange [end] =
+  mconcat
+    [ "struct gen *g=range(0,",
+      show end,
+      ",1,NULL);"
+    ]
+showRange [start, end] =
+  mconcat
+    [ "struct gen *g=range(",
+      show start,
+      ",",
+      show end,
+      ",1,NULL);"
+    ]
+showRange [start, end, step] =
+  mconcat
+    [ "struct gen *g=range(",
+      show start,
+      ",",
+      show end,
+      ",",
+      show step,
+      ",NULL);"
+    ]
+showRange _ = error "showRange: invalid number of arguments"
