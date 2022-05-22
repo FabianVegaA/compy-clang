@@ -10,6 +10,7 @@ import Test.PrefixTest (prefixTest)
 import Test.ReturnTest (returnTest)
 import Test.ValTest (valTest)
 import Test.WhileTest (whileTest)
+import Test.ForTest (forTest)
 
 main :: IO ()
 main = do
@@ -25,7 +26,8 @@ main = do
         functionTest,
         whileTest,
         assignTest,
-        declareTest
+        declareTest,
+        forTest
       ]
   if and results
     then putStrLn "All tests passed!"
