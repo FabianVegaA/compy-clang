@@ -4,6 +4,7 @@ import Expression
         Block,
         Call,
         Declare,
+        For,
         Function,
         If,
         Infix,
@@ -23,8 +24,11 @@ main = do
         Program
           [ Function "main" [] Void $
               Block
-                [ Declare "x" (Infix (Literal "1" Int) Add (Literal "1" Int)) Int,
-                  Call "print" [Literal "%d" String, Call "fibonacci" [Literal "7" Int]]
+                [ For
+                    (Val "i")
+                    (Call "range" [Literal "10" Int])
+                    (Block [Call "print" [Literal "%d\\n" String, Val "i"]]),
+                  Return (Literal "0" Int)
                 ],
             Function
               "fibonacci"
