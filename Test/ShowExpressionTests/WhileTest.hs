@@ -1,4 +1,4 @@
-module Test.WhileTest where
+module Test.ShowExpressionTests.WhileTest where
 
 import Expression
   ( Expression (Assign, Block, Infix, Literal, Val, While),
@@ -16,7 +16,7 @@ whileTest =
                   [ Assign "x" (Infix (Val "x") Add (Literal "1" Int))
                   ]
               ),
-            "while(1){x=x+1;}"
+            "while(1){x=x+1;;}"
           ),
           ( While
               (Infix (Val "x") Eq (Literal "10" Int))
@@ -24,7 +24,7 @@ whileTest =
                   [ Assign "x" (Infix (Val "x") Add (Literal "1" Int))
                   ]
               ),
-            "while(x==10){x=x+1;}"
+            "while(x==10){x=x+1;;}"
           )
         ]
    in test cases "While"

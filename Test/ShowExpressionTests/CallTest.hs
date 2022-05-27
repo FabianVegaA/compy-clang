@@ -1,6 +1,6 @@
-module Test.CallTest where
+module Test.ShowExpressionTests.CallTest where
 
-import Expression
+import Expression (Expression (Call, Val))
 import Test.UtilsTest (test)
 
 callTest :: IO Bool

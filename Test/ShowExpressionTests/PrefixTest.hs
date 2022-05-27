@@ -1,4 +1,4 @@
-module Test.PrefixTest where
+module Test.ShowExpressionTests.PrefixTest where
 
 import Expression
   ( Expression (Literal, Prefix),

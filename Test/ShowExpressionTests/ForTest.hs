@@ -1,4 +1,4 @@
-module Test.ForTest where
+module Test.ShowExpressionTests.ForTest where
 
 import Expression
   ( Expression (Block, Call, For, Literal, Val),

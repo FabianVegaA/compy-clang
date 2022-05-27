@@ -1,4 +1,4 @@
-module Test.InfixTest where
+module Test.ShowExpressionTests.InfixTest where
 
 import Expression
   ( Expression (Infix, Literal),

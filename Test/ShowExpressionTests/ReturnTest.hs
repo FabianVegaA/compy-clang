@@ -1,6 +1,11 @@
-module Test.ReturnTest where
+module Test.ShowExpressionTests.ReturnTest where
 
-import Expression (Expression (Infix, Literal, Prefix, Return, Val), Operator (Add), PrefixOperator (Not), Type (Int))
+import Expression
+  ( Expression (Infix, Literal, Prefix, Return, Val),
+    Operator (Add),
+    PrefixOperator (Not),
+    Type (Int),
+  )
 import Test.UtilsTest (test)
 
 returnTest :: IO Bool

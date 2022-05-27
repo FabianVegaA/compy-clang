@@ -1,4 +1,4 @@
-module Test.DeclareTest where
+module Test.ShowExpressionTests.DeclareTest where
 
 import Expression
   ( Expression (Declare, Infix, Literal),

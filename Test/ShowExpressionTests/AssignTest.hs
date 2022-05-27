@@ -1,4 +1,4 @@
-module Test.AssignTest where
+module Test.ShowExpressionTests.AssignTest where
 
 import Expression
   ( Expression (Assign, Infix, Literal),
@@ -6,6 +6,7 @@ import Expression
     Type (Int),
   )
 import Test.UtilsTest (test)
+
 
 assignTest :: IO Bool
 assignTest =
