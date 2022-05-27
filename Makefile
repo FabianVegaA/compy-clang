@@ -25,6 +25,8 @@ test: clean
 	ghc test/Test.hs -o bin/Test
 	mv test/*.o bin/
 	mv test/*.hi bin/
+	mv test/ShowExpressionTests/*.o bin/
+	mv test/ShowExpressionTests/*.hi bin/
 	mv *.o bin/
 	mv *.hi bin/
 	./bin/Test
